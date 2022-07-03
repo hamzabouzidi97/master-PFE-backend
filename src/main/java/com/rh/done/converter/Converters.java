@@ -1,11 +1,7 @@
 package com.rh.done.converter;
 
-import com.rh.done.dto.ClientDto;
-import com.rh.done.dto.DemandeMissionDto;
-import com.rh.done.dto.ProjetDto;
-import com.rh.done.entity.Client;
-import com.rh.done.entity.DemandeMission;
-import com.rh.done.entity.Projet;
+import com.rh.done.dto.*;
+import com.rh.done.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,5 +95,68 @@ public class Converters {
             demandeMissionDtos.add(convertDemandeMissionToDto(demandeMission));
         }
         return demandeMissionDtos;
+    }
+
+    public static DemandeConge convertCongeDtoMissionToEntity(DemandeCongeDto demandeCongeDto){
+        return DemandeConge.builder()
+                .dateDebut(demandeCongeDto.getDateDebut())
+                .dateFin(demandeCongeDto.getDateFin())
+                .validerParManager(demandeCongeDto.isValiderParManager())
+                .validerParRh(demandeCongeDto.isValiderParRh())
+                .refuserParManager(demandeCongeDto.isRefuserParManager())
+                .refuserParRh(demandeCongeDto.isRefuserParRh())
+                .commentaire(demandeCongeDto.getCommentaire())
+                .typeConge(convertTypeCongeDtoToEntity(demandeCongeDto.getTypeCongeDto()))
+                .duree(demandeCongeDto.getDuree())
+                .build();
+    }
+
+    public static DemandeCongeDto convertCongeEntityToDto(DemandeConge demandeConge){
+        return DemandeCongeDto.builder()
+                .dateDebut(demandeConge.getDateDebut())
+                .dateFin(demandeConge.getDateFin())
+                .commentaire(demandeConge.getCommentaire())
+                .id(demandeConge.getId())
+                .refuserParManager(demandeConge.isRefuserParManager())
+                .refuserParRh(demandeConge.isRefuserParRh())
+                .validerParManager(demandeConge.isValiderParManager())
+                .validerParRh(demandeConge.isValiderParRh())
+                .typeCongeDto(convertTypeCongeToDto(demandeConge.getTypeConge()))
+                .duree((int)demandeConge.getDuree())
+                .build();
+    }
+
+    public static List<DemandeCongeDto> convertListDemandeCongeToDto(List<DemandeConge> demandeConges){
+        List<DemandeCongeDto> demandeCongeDtos = new ArrayList<>();
+        for(DemandeConge demandeConge: demandeConges){
+            demandeCongeDtos.add(convertCongeEntityToDto(demandeConge));
+        }
+        return demandeCongeDtos;
+    }
+    public static TypeConge convertTypeCongeDtoToEntity(TypeCongeDto typeCongeDto){
+        return TypeConge.builder()
+                .typeConge(typeCongeDto.getTypeConge())
+                .maxJour(typeCongeDto.getMaxJour())
+                .minJour(typeCongeDto.getMinJour())
+                .id(typeCongeDto.getId())
+                .build();
+    }
+
+
+    public static TypeCongeDto convertTypeCongeToDto(TypeConge typeConge){
+        return TypeCongeDto.builder()
+                .typeConge(typeConge.getTypeConge())
+                .maxJour(typeConge.getMaxJour())
+                .minJour(typeConge.getMinJour())
+                .id(typeConge.getId())
+                .build();
+    }
+
+    public static List<TypeCongeDto> convertListTypeCongeToDto(List<TypeConge> typeCongeList){
+        List<TypeCongeDto> typeCongeDtoList = new ArrayList<>();
+        for(TypeConge typeConge: typeCongeList){
+            typeCongeDtoList.add(convertTypeCongeToDto(typeConge));
+        }
+        return typeCongeDtoList;
     }
 }

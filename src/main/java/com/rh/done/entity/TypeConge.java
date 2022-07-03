@@ -1,6 +1,7 @@
 package com.rh.done.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-@Entity
+@Entity @Builder
 @Data @NoArgsConstructor @AllArgsConstructor
 public class TypeConge  implements Serializable {
 

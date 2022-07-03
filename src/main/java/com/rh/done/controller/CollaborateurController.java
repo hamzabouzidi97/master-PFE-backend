@@ -1,8 +1,6 @@
 package com.rh.done.controller;
 
-import com.rh.done.dto.DemandeMissionDto;
-import com.rh.done.dto.ProjetDto;
-import com.rh.done.dto.UserDto;
+import com.rh.done.dto.*;
 import com.rh.done.entity.Client;
 import com.rh.done.entity.Projet;
 import com.rh.done.entity.User;
@@ -72,6 +70,36 @@ public class CollaborateurController {
     ResponseEntity<?> getMesDemandesMissions(@PathVariable("id") Long id){
         try {
             return new ResponseEntity<>(this.collaborateurService.getMesDemandesMissions(id), HttpStatus.OK);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("bed", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/save-demande-conge")
+    ResponseEntity<?> demanderConge(@RequestBody DemandeCongeDto demandeCongeDto) {
+        try {
+            MyResponse response = this.collaborateurService.saveDemandeConge(demandeCongeDto);
+            if(response.getCode().equals("00"))
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(response.getObject(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("bed", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/types-conges")
+    List<TypeCongeDto> typeCongeDtoList(){
+       return this.collaborateurService.typeCongeList();
+    }
+
+    @GetMapping("/mes-demandes-conge/{id}")
+    ResponseEntity<?> getMesDemandesconges(@PathVariable("id") Long id){
+        try {
+            return new ResponseEntity<>(this.collaborateurService.getMesDemandesConge(id), HttpStatus.OK);
 
         }catch (Exception e){
             e.printStackTrace();

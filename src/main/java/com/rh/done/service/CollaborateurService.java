@@ -2,8 +2,10 @@ package com.rh.done.service;
 
 import com.rh.done.converter.Converters;
 import com.rh.done.converter.UserConverter;
+import com.rh.done.dto.DemandeCongeDto;
 import com.rh.done.dto.DemandeMissionDto;
 import com.rh.done.dto.ProjetDto;
+import com.rh.done.dto.TypeCongeDto;
 import com.rh.done.entity.*;
 import com.rh.done.repository.*;
 import com.rh.done.util.MyResponse;
@@ -31,6 +33,10 @@ public class CollaborateurService {
     ClientRepository clientRepository;
     @Autowired
     DemandeMissionRepository demandeMissionRepository;
+    @Autowired
+    DemandeCongeRepository demandeCongeRepository;
+    @Autowired
+    TypeCongeRepository typeCongeRepository;
 
     public MyResponse dossierAdministratif(String matricule) {
         Optional<User> user = this.userRepository.findByMatricule(matricule);
@@ -93,5 +99,38 @@ public class CollaborateurService {
             }
         }
          return demandeMissionDtos;
+    }
+
+    public MyResponse saveDemandeConge(DemandeCongeDto demandeCongeDto){
+       DemandeConge demandeConge = Converters.convertCongeDtoMissionToEntity(demandeCongeDto);
+       Optional<User> user= this.userRepository.findById((long) demandeCongeDto.getDemandeur());
+        if(!user.isPresent()){
+            throw new IllegalArgumentException("le demandeur n'existe pas");
+        }
+       Optional<TypeConge> typeConge= this.typeCongeRepository.findById(demandeCongeDto.getTypeCongeDto().getId());
+       if(!typeConge.isPresent()){
+           throw new IllegalArgumentException("le type de congé n'existe pas");
+       }
+       demandeConge.setDemandeur(user.get());
+       demandeConge.setTypeConge(typeConge.get());
+
+        this.demandeCongeRepository.save(demandeConge);
+       return new MyResponse("00", "Votre demande ajouté avec succée");
+    }
+
+    public List<TypeCongeDto> typeCongeList(){
+        return Converters.convertListTypeCongeToDto(this.typeCongeRepository.findAll());
+    }
+
+        public List<DemandeCongeDto> getMesDemandesConge(Long id) {
+        Optional<User> user= this.userRepository.findById(id);
+        List<DemandeCongeDto> demandeCongeDtos = new ArrayList<>();
+        if(user.isPresent()){
+            List<DemandeConge> demandeConges=this.demandeCongeRepository.findByDemandeur(user.get());
+            if(!demandeConges.isEmpty()){
+                return Converters.convertListDemandeCongeToDto(demandeConges);
+            }
+        }
+        return demandeCongeDtos;
     }
 }

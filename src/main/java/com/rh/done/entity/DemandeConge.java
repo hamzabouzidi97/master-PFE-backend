@@ -1,6 +1,7 @@
 package com.rh.done.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
+@Entity @Builder
 @Data @NoArgsConstructor @AllArgsConstructor
 public class DemandeConge implements Serializable {
 
@@ -23,7 +24,8 @@ public class DemandeConge implements Serializable {
     @OneToOne
     private User demandeur;
     private boolean validerParManager = false;
-    private boolean validerParR = false;
+    private boolean validerParRh = false;
     private boolean refuserParManager;
     private boolean refuserParRh;
+    private String commentaire;
 }

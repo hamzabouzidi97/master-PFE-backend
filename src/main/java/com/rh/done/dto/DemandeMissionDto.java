@@ -9,7 +9,7 @@ import java.util.Date;
 public class DemandeMissionDto {
 
     private Long id;
-    private User demandeur;
+    private UserDto demandeur;
     private Date dateDebut;
     private Date dateFin;
     private int duree;
